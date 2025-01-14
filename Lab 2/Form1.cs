@@ -114,5 +114,15 @@ namespace Notepad
         {
             richTextBox1.SelectAll();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            richTextBox1.WordWrap = !richTextBox1.WordWrap;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
