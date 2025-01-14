@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -82,6 +82,37 @@ namespace Notepad
         private void redoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             richTextBox1.Redo();
+        }
+
+        private void fontToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FontDialog fd = new FontDialog();
+            fd.Font = richTextBox1.SelectionFont;
+            fd.Color = richTextBox1.SelectionColor;
+            if (fd.ShowDialog() == DialogResult.OK)
+            {
+                richTextBox1.SelectionFont = fd.Font;
+                richTextBox1.SelectionColor = fd.Color;
+            } 
+        }
+
+        private void colorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ColorDialog cd = new ColorDialog();
+            if (cd.ShowDialog() == DialogResult.OK) 
+            { 
+                richTextBox1.SelectionColor = cd.Color; 
+            }
+        }
+
+        private void wordWrappingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox1.WordWrap = !richTextBox1.WordWrap;
+        }
+
+        private void selectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox1.SelectAll();
         }
     }
 }
