@@ -7,3 +7,10 @@ create table Car(regno varchar(20) primary key,model varchar(30) not null,year i
 create table Accident(report_number int primary key,accd_date date,location varchar(50));
 
 create table OWNS(driver_id varchar(30) primary key,regno varchar(20) not null);
+
+create table Participated(driver_id varchar(30) primary key,regno varchar(20) not null,report_number int,damag
+e_amount int);
+
+clear screen
+
+alter table Participated add foreign key(driver_id) references PERSON;
