@@ -14,3 +14,5 @@ e_amount int);
 clear screen
 
 alter table Participated add foreign key(driver_id) references PERSON;
+
+alter table Participated add foreign key(regno) references CAR;
