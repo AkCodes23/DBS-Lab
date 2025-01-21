@@ -22,3 +22,9 @@ alter table Participated add foreign key(report_number) references ACCIDENT;
 alter table OWNS add foreign key(driver_id) references PERSON;
 
 alter table OWNS add foreign key(regno) references CAR;
+
+insert into PERSON values('Ak23','Akhil','jp nagar');
+insert into PERSON values('SUJ','suraj','MG road');
+insert into PERSON values('Palindrome','harsh','Thane');
+insert into PERSON values('Shivam','Singh','Mumbai');
+insert into PERSON values('aditya','Keshav','Mumbai');
