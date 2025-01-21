@@ -16,3 +16,5 @@ clear screen
 alter table Participated add foreign key(driver_id) references PERSON;
 
 alter table Participated add foreign key(regno) references CAR;
+
+alter table Participated add foreign key(report_number) references ACCIDENT;
