@@ -1,30 +1,42 @@
-SELECT * FROM user_tables;
+CREATE TABLE PERSON(driver_id VARCHAR(30) PRIMARY KEY, name VARCHAR(50) NOT NULL, address VARCHAR(100) NOT NULL);
+CREATE TABLE CAR(regno VARCHAR(20) PRIMARY KEY, model VARCHAR(30) NOT NULL, year INT);
+CREATE TABLE ACCIDENT(report_number INT PRIMARY KEY, accd_date DATE, location VARCHAR(50));
+CREATE TABLE OWNS(driver_id VARCHAR(30) PRIMARY KEY, regno VARCHAR(20) NOT NULL);
+CREATE TABLE PARTICIPATED(driver_id VARCHAR(30) PRIMARY KEY, regno VARCHAR(20) NOT NULL, report_number INT, damage_amount INT);
 
-create table PERSON(driver_id varchar(30) primary key,name varchar(50) not null,address varchar(100) not null);
+ALTER TABLE PARTICIPATED ADD FOREIGN KEY(driver_id) REFERENCES PERSON;
+ALTER TABLE PARTICIPATED ADD FOREIGN KEY(regno) REFERENCES CAR;
+ALTER TABLE PARTICIPATED ADD FOREIGN KEY(report_number) REFERENCES ACCIDENT;
+ALTER TABLE OWNS ADD FOREIGN KEY(driver_id) REFERENCES PERSON;
+ALTER TABLE OWNS ADD FOREIGN KEY(regno) REFERENCES CAR;
 
-create table Car(regno varchar(20) primary key,model varchar(30) not null,year int);
+INSERT INTO PERSON VALUES('Ak23', 'Akhil', 'JP Nagar');
+INSERT INTO PERSON VALUES('SUJ', 'Suraj', 'MG Road');
+INSERT INTO PERSON VALUES('Palindrome', 'Harsh', 'Thane');
+INSERT INTO PERSON VALUES('Shivam', 'Singh', 'Mumbai');
+INSERT INTO PERSON VALUES('Aditya', 'Keshav', 'Mumbai');
 
-create table Accident(report_number int primary key,accd_date date,location varchar(50));
+INSERT INTO CAR (regno, model, year) VALUES ('KA01AB1234', 'Maruti Suzuki Swift', 2018);
+INSERT INTO CAR (regno, model, year) VALUES ('WB02CD5678', 'Hyundai i20', 2020);
+INSERT INTO CAR (regno, model, year) VALUES ('DL03EF9012', 'Honda City', 2017);
+INSERT INTO CAR (regno, model, year) VALUES ('KA04GH3456', 'Toyota Innova', 2019);
+INSERT INTO CAR (regno, model, year) VALUES ('MH05IJ7890', 'Tata Nexon', 2021);
 
-create table OWNS(driver_id varchar(30) primary key,regno varchar(20) not null);
+INSERT INTO ACCIDENT (report_number, accd_date, location) VALUES (1001, TO_DATE('2024-01-15', 'YYYY-MM-DD'), 'MG Road, Bengaluru');
+INSERT INTO ACCIDENT (report_number, accd_date, location) VALUES (1002, TO_DATE('2024-02-20', 'YYYY-MM-DD'), 'Park Street, Kolkata');
+INSERT INTO ACCIDENT (report_number, accd_date, location) VALUES (1003, TO_DATE('2024-03-10', 'YYYY-MM-DD'), 'Nehru Nagar, Delhi');
+INSERT INTO ACCIDENT (report_number, accd_date, location) VALUES (1004, TO_DATE('2024-04-05', 'YYYY-MM-DD'), 'Gandhi Bazaar, Udupi');
+INSERT INTO ACCIDENT (report_number, accd_date, location) VALUES (1005, TO_DATE('2024-05-25', 'YYYY-MM-DD'), 'Marine Drive, Mumbai');
 
-create table Participated(driver_id varchar(30) primary key,regno varchar(20) not null,report_number int,damag
-e_amount int);
+INSERT INTO OWNS (driver_id, regno) VALUES ('Ak23', 'KA01AB1234');
+INSERT INTO OWNS (driver_id, regno) VALUES ('SUJ', 'WB02CD5678');
+INSERT INTO OWNS (driver_id, regno) VALUES ('Palindrome', 'DL03EF9012');
+INSERT INTO OWNS (driver_id, regno) VALUES ('Shivam', 'KA04GH3456');
+INSERT INTO OWNS (driver_id, regno) VALUES ('Aditya', 'MH05IJ7890');
 
-clear screen
+INSERT INTO PARTICIPATED (driver_id, regno, report_number, damage_amount) VALUES ('Ak23', 'KA01AB1234', 1001, 15000);
+INSERT INTO PARTICIPATED (driver_id, regno, report_number, damage_amount) VALUES ('SUJ', 'WB02CD5678', 1002, 20000);
+INSERT INTO PARTICIPATED (driver_id, regno, report_number, damage_amount) VALUES ('Palindrome', 'DL03EF9012', 1003, 25000);
+INSERT INTO PARTICIPATED (driver_id, regno, report_number, damage_amount) VALUES ('Shivam', 'KA04GH3456', 1004, 30000);
+INSERT INTO PARTICIPATED (driver_id, regno, report_number, damage_amount) VALUES ('Aditya', 'MH05IJ7890', 1005, 35000);
 
-alter table Participated add foreign key(driver_id) references PERSON;
-
-alter table Participated add foreign key(regno) references CAR;
-
-alter table Participated add foreign key(report_number) references ACCIDENT;
-
-alter table OWNS add foreign key(driver_id) references PERSON;
-
-alter table OWNS add foreign key(regno) references CAR;
-
-insert into PERSON values('Ak23','Akhil','jp nagar');
-insert into PERSON values('SUJ','suraj','MG road');
-insert into PERSON values('Palindrome','harsh','Thane');
-insert into PERSON values('Shivam','Singh','Mumbai');
-insert into PERSON values('aditya','Keshav','Mumbai');
