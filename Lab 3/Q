@@ -1,0 +1,9 @@
+SELECT * FROM user_tables;
+
+create table PERSON(driver_id varchar(30) primary key,name varchar(50) not null,address varchar(100) not null);
+
+create table Car(regno varchar(20) primary key,model varchar(30) not null,year int);
+
+create table Accident(report_number int primary key,accd_date date,location varchar(50));
+
+create table OWNS(driver_id varchar(30) primary key,regno varchar(20) not null);
