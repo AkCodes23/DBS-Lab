@@ -11,6 +11,13 @@ CREATE TABLE COURSE (
     dept VARCHAR(30) NOT NULL
 );
 
+CREATE TABLE TEXT (
+    book_isbn INT PRIMARY KEY,
+    booktitle VARCHAR(50) NOT NULL,
+    publisher VARCHAR(50) NOT NULL,
+    author VARCHAR(50) NOT NULL
+);
+
 CREATE TABLE ENROLL (
     regno VARCHAR(20),
     course# INT,
@@ -31,9 +38,3 @@ CREATE TABLE BOOK_ADOPTION (
     FOREIGN KEY (book_isbn) REFERENCES TEXT(book_isbn)
 );
 
-CREATE TABLE TEXT (
-    book_isbn INT PRIMARY KEY,
-    booktitle VARCHAR(50) NOT NULL,
-    publisher VARCHAR(50) NOT NULL,
-    author VARCHAR(50) NOT NULL
-);
