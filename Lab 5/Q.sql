@@ -73,3 +73,13 @@ SELECT course#
 FROM BOOK_ADOPTION 
 GROUP BY course# 
 HAVING COUNT(book_isbn) > 1;
+
+--B)
+SELECT c.dept
+FROM COURSE c
+WHERE NOT EXISTS (
+  SELECT *
+  FROM BOOK_ADOPTION ba
+  JOIN TEXT t ON ba.book_isbn = t.book_isbn
+  WHERE c.course# = ba.course#
+  AND t.publisher = 'Pearson');
