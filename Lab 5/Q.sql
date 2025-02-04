@@ -133,14 +133,34 @@ GROUP BY ba.course#
 HAVING COUNT(t.book_isbn) >= 2;
 
 --H)
-SELECT e.regno
+SELECT e.regno, COUNT(e.book_isbn) AS book_count
 FROM ENROLL e
 GROUP BY e.regno
 HAVING COUNT(e.book_isbn) = (
-  SELECT MAX(book_count)
-  FROM (
-    SELECT COUNT(book_isbn) AS book_count
-    FROM ENROLL
-    GROUP BY regno
-  )
+    SELECT MAX(book_count)
+    FROM (
+        SELECT COUNT(book_isbn) AS book_count
+        FROM ENROLL
+        GROUP BY regno
+    ) max_books
+);
+
+--I)
+SELECT t.publisher, COUNT(t.book_isbn) AS number_of_books
+FROM TEXT t
+GROUP BY t.publisher;
+
+--J)
+SELECT s.regno, s.name
+FROM STUDENT s
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM BOOK_ADOPTION ba
+    WHERE NOT EXISTS (
+        SELECT 1
+        FROM ENROLL e
+        WHERE e.regno = s.regno
+          AND e.course# = ba.course#
+          AND e.book_isbn = ba.book_isbn
+    )
 );
