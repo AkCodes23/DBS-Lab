@@ -49,3 +49,9 @@ INSERT INTO COURSE VALUES(102, 'Digital Circuits', 'CC');
 INSERT INTO COURSE VALUES(103, 'Thermodynamics', 'ME');
 INSERT INTO COURSE VALUES(104, 'Structural Analysis', 'CE');
 INSERT INTO COURSE VALUES(105, 'Operating Systems', 'CS');
+
+INSERT INTO TEXT VALUES(1001, 'Data Structures Using C', 'Pearson', 'RCCma Thareja');
+INSERT INTO TEXT VALUES(1002, 'Digital Design', 'McGraw Hill', 'M. Morris Mano');
+INSERT INTO TEXT VALUES(1003, 'Thermodynamics', 'Wiley', 'Yunus A. Cengel');
+INSERT INTO TEXT VALUES(1004, 'Structural Analysis', 'McGraw Hill', 'R.C. Hibbeler');
+INSERT INTO TEXT VALUES(1005, 'Operating System Concepts', 'Wiley', 'Abraham Silberschatz');
