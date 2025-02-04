@@ -83,3 +83,64 @@ WHERE NOT EXISTS (
   JOIN TEXT t ON ba.book_isbn = t.book_isbn
   WHERE c.course# = ba.course#
   AND t.publisher = 'Pearson');
+
+--C)
+SELECT e.regno
+FROM ENROLL e, COURSE c
+WHERE e.course# = c.course#
+GROUP BY e.regno
+HAVING COUNT(DISTINCT c.dept) > 1;
+
+--D)
+SELECT s.name
+FROM STUDENT s
+WHERE s.regno NOT IN (
+  SELECT e.regno
+  FROM ENROLL e
+);
+
+--E)
+E)
+SELECT c.dept
+FROM COURSE c
+WHERE NOT EXISTS (
+  SELECT 1
+  FROM BOOK_ADOPTION ba, TEXT t
+  WHERE c.course# = ba.course#
+    AND ba.book_isbn = t.book_isbn
+    AND t.publisher <> 'Pearson');
+
+--F)
+SELECT t.booktitle
+FROM TEXT t
+WHERE EXISTS (
+  SELECT *
+  FROM BOOK_ADOPTION ba
+  WHERE t.book_isbn = ba.book_isbn
+)
+AND EXISTS (
+  SELECT *
+  FROM ENROLL e
+  WHERE t.book_isbn = e.book_isbn
+);
+
+--G)
+SELECT ba.course#
+FROM BOOK_ADOPTION ba
+JOIN TEXT t ON ba.book_isbn = t.book_isbn
+WHERE t.publisher = 'Pearson'
+GROUP BY ba.course#
+HAVING COUNT(t.book_isbn) >= 2;
+
+--H)
+SELECT e.regno
+FROM ENROLL e
+GROUP BY e.regno
+HAVING COUNT(e.book_isbn) = (
+  SELECT MAX(book_count)
+  FROM (
+    SELECT COUNT(book_isbn) AS book_count
+    FROM ENROLL
+    GROUP BY regno
+  )
+);
