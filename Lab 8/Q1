@@ -1,0 +1,264 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Oracle.DataAccess.Client;
+using Oracle.DataAccess.Types;
+
+namespace WindowsFormsApplication1
+{
+    public partial class Form1 : Form
+    {
+        OracleConnection conn;
+        OracleCommand comm;
+        OracleDataAdapter da;
+        DataSet ds;
+        DataTable dt;
+        DataRow dr;
+        int i = 0; 
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        public void connect() {
+            string constring="DATA SOURCE=172.16.54.24:1521/ictorcl;USER ID=CCE230953496;Password=PERSON;";
+            conn=new OracleConnection(constring);
+            conn.Open();
+            MessageBox.Show("connected");
+        }
+        private void Connect_Click(object sender, EventArgs e) 
+{ 
+connect(); 
+comm = new OracleCommand(); 
+comm.CommandText = "select * from PERSON";  
+comm.CommandType = CommandType.Text; 
+ds = new DataSet(); 
+da = new OracleDataAdapter(comm.CommandText, conn);  
+da.Fill(ds, "PERSON"); 
+dt = ds.Tables["PERSON"]; 
+int t = dt.Rows.Count; 
+MessageBox.Show(t.ToString()); 
+dr = dt.Rows[i]; 
+textBox1.Text = dr["id"].ToString(); 
+textBox2.Text = dr["name"].ToString(); 
+textBox3.Text = dr["deptname"].ToString(); 
+textBox4.Text = dr["salary"].ToString(); 
+conn.Close(); 
+}
+
+        private void Next_Click(object sender, EventArgs e)
+        {
+            i++;
+            if (i >= dt.Rows.Count)
+                i = 0;
+            dr = dt.Rows[i];
+            textBox1.Text = dr["id"].ToString();
+            textBox2.Text = dr["name"].ToString();
+            textBox3.Text = dr["deptname"].ToString();
+            textBox4.Text = dr["salary"].ToString();
+        }
+
+        private void Previous_Click(object sender, EventArgs e)
+        {
+            i--;
+            if (i < 0)
+                i = dt.Rows.Count - 1;
+            dr = dt.Rows[i];
+            textBox1.Text = dr["id"].ToString();
+            textBox2.Text = dr["name"].ToString();
+            textBox3.Text = dr["deptname"].ToString();
+            textBox4.Text = dr["salary"].ToString();
+        }
+
+        private void Insert_Click(object sender, EventArgs e)
+        {
+            
+            int sal;
+            if (int.TryParse(textBox4.Text, out sal)) 
+            {
+                using (OracleCommand cm = new OracleCommand())
+                {
+                    connect();
+                    conn.Open();
+                    cm.Connection = conn;
+                    cm.CommandText = "INSERT INTO PERSON (column1, column2, column3, column4) VALUES (:param1, :param2, :param3, :param4)";
+                    cm.CommandType = CommandType.Text;
+                    cm.Parameters.Add(new OracleParameter("param1", textBox1.Text));
+                    cm.Parameters.Add(new OracleParameter("param2", textBox2.Text));
+                    cm.Parameters.Add(new OracleParameter("param3", textBox3.Text));
+                    cm.Parameters.Add(new OracleParameter("param4", sal));
+
+                    try
+                    {
+                        cm.ExecuteNonQuery();
+                        MessageBox.Show("Inserted!");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("An error occurred: " + ex.Message);
+                    }
+                    finally
+                    {
+                        conn.Close();
+                    }
+                }
+            }
+        }
+        private void Update_Click(object sender, EventArgs e)
+        {
+            
+            int v = int.Parse(textBox2.Text);
+            OracleCommand cm = new OracleCommand();
+            cm.Connection = conn;
+            cm.CommandText = "update PERSON set salary=:pb where deptname =:pdn";
+            cm.CommandType = CommandType.Text;
+            OracleParameter pa1 = new OracleParameter();
+            pa1.ParameterName = "pb";
+            pa1.DbType = DbType.Int32;
+            pa1.Value = v;
+            OracleParameter pa2 = new OracleParameter();
+            pa2.ParameterName = "pdn";
+            pa2.DbType = DbType.String;
+            pa2.Value = textBox1.Text;
+            cm.Parameters.Add(pa1);
+            cm.Parameters.Add(pa2);
+            cm.ExecuteNonQuery();
+            MessageBox.Show("updated");
+            conn.Close();
+        }
+        private void GetGrid_Click(object sender, EventArgs e)
+        {
+            
+            comm = new OracleCommand();
+            comm.CommandText = "select * from PERSON";
+            comm.CommandType = CommandType.Text;
+            ds = new DataSet();
+            da = new OracleDataAdapter(comm.CommandText, conn);
+            da.Fill(ds, "PERSON");
+            dt = ds.Tables["PERSON"];
+            int t = dt.Rows.Count;
+            MessageBox.Show(t.ToString());
+            dr = dt.Rows[i];
+            dataGridView1.DataSource = ds;
+            dataGridView1.DataMember = "PERSON";
+            conn.Close();
+        }
+
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                connect();
+                conn.Open();
+
+                comm = new OracleCommand();
+                comm.Connection = conn;
+                comm.CommandText = "select deptname from PERSON";
+                comm.CommandType = CommandType.Text;
+
+                ds = new DataSet();
+                da = new OracleDataAdapter(comm.CommandText, conn);
+                da.Fill(ds, "PERSON");
+
+                dt = ds.Tables["PERSON"];
+                int t = dt.Rows.Count;
+
+                MessageBox.Show(t.ToString());
+                comboBox1.DataSource = dt.DefaultView;
+                comboBox1.DisplayMember = "deptname";
+
+
+            }
+            catch (Exception ex)
+            {
+               // MessageBox.Show("Error: " + ex.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string selectedFunction = comboBox1.SelectedItem.ToString();
+
+    if (string.IsNullOrEmpty(selectedFunction))
+    {
+        MessageBox.Show("Please select an operation.");
+        return;
+    }
+
+    switch (selectedFunction)
+    {
+        case "Connect":
+            connect();
+            break;
+
+        case "Next":
+            Next_Click(sender, e);
+            break;
+
+        case "Previous":
+            Previous_Click(sender, e);
+            break;
+
+        case "Insert":
+            Insert_Click(sender, e);
+            break;
+
+        case "Update":
+            Update_Click(sender, e);
+            break;
+
+        case "Get Grid":
+            GetGrid_Click(sender, e);
+            break;
+
+        default:
+            MessageBox.Show("Invalid operation selected.");
+            break;
+    }
+
+            
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
